@@ -5,8 +5,6 @@
 int cmpfunc (const void * a, const void * b);
 int procurarTabuaQueEncaixe(int *tamanhoTabuasDoadas, int aPartir, int ate, int tamanhoBuscado);
 
-int main(){
-
 	char condArr[10];
 	char *cond = condArr;
 
@@ -29,6 +27,10 @@ int main(){
 		tamanho de cada tabua doada (1 ≤ Xi ≤ 104 para 1 ≤ i ≤ K)
 	*/
 	int *tamanhoTabuasDoadas;
+
+	int tmp;
+
+int main(){
 
 	do{
 
@@ -62,11 +64,19 @@ int main(){
 		// processamento
 
 		// somando as larguras chega exatamente na largura/altura do salao e nao fica faltando tabuas?
-		int larguraTabuasMetros = larguraTabuas / 100;
+		float larguraTabuasMetros = larguraTabuas / 100.0;
+        if(larguraTabuasMetros - (int) larguraTabuasMetros != 0){
+            printf("impossivel\n");
+            goto proximoComando;
+        }
 
 		qsort(tamanhoTabuasDoadas, tabuasDoadas, sizeof(int), cmpfunc);
-		int qtdTabuas = calculaQuantidadeTabuas(dimensaoX, dimensaoY, larguraTabuasMetros, tabuasDoadas, tamanhoTabuasDoadas);
-		int qtdTabuas2 = calculaQuantidadeTabuas(dimensaoY, dimensaoX, larguraTabuasMetros, tabuasDoadas, tamanhoTabuasDoadas);
+		int qtdTabuas = calculaQuantidadeTabuas(dimensaoX, dimensaoY, (int)larguraTabuasMetros, tabuasDoadas, tamanhoTabuasDoadas);
+		tmp = dimensaoX;
+		dimensaoX = dimensaoY;
+		dimensaoY = tmp;
+		qsort(tamanhoTabuasDoadas, tabuasDoadas, sizeof(int), cmpfunc);
+		int qtdTabuas2 = calculaQuantidadeTabuas(dimensaoX, dimensaoY, (int)larguraTabuasMetros, tabuasDoadas, tamanhoTabuasDoadas);
 
 		int r = qtdTabuas > qtdTabuas2 ? qtdTabuas : qtdTabuas2;
 		if(r == -1){
@@ -81,7 +91,7 @@ int main(){
 		// se sim para todos soh imprimir a quantidade usada de tabuas
 		// se nao impossivel
 
-
+        proximoComando:
 		scanf("%[^\n]%*c", cond);
 	}while(strcmp(cond, "0 0") != 0);
 
@@ -104,13 +114,18 @@ int calculaQuantidadeTabuas(int dimensaoX, int dimensaoY, int larguraTabuasMetro
             if(r == -1){
                 return -1;
             }
+            qtdTotalTabuas++;
 		}
-		qtdTotalTabuas++;
+
 	}
 	return qtdTotalTabuas;
 }
 
 int cmpfunc (const void * a, const void * b){
+    if(*(int *)a > dimensaoY){
+        return 1;
+    }
+
 	return ( *(int*)b - *(int*)a );
 }
 

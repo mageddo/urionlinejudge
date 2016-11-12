@@ -2,7 +2,6 @@ package P1086;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.Scanner;
 
 /**
@@ -35,14 +34,14 @@ public class Main {
 		tamanho de cada tabua doada (1 ≤ Xi ≤ 104 para 1 ≤ i ≤ K)
 	*/
 	Integer[] tamanhoTabuasDoadas;
-
+	String lastLine = r.nextLine();
 		do{
 
+			String[] dimensions = lastLine.split(" ");
+
 			// primeira linha
-			dimensaoX = r.nextInt();
-
-
-			dimensaoY = r.nextInt();
+			dimensaoX = Integer.parseInt(dimensions[0]);
+			dimensaoY = Integer.parseInt(dimensions[1]);
 
 			// segunda linha
 			larguraTabuas = r.nextInt();
@@ -61,18 +60,9 @@ public class Main {
 			r.nextLine();
 
 			float larguraTabuasMetro = larguraTabuas / 100.0f;
-
-
-			Arrays.sort(tamanhoTabuasDoadas, new Comparator<Integer>() {
-				@Override
-				public int compare(Integer a, Integer b) {
-					return b - a;
-				}
-			});
-
 			int r1 = calcQtdTabuas(tabuasDoadas, Arrays.copyOf(tamanhoTabuasDoadas, tamanhoTabuasDoadas.length),
-					larguraTabuasMetro, dimensaoY, dimensaoX);
-			int r2 = calcQtdTabuas(tabuasDoadas, tamanhoTabuasDoadas, larguraTabuasMetro, dimensaoX, dimensaoY);
+					larguraTabuasMetro, dimensaoX, dimensaoY);
+			int r2 = calcQtdTabuas(tabuasDoadas, tamanhoTabuasDoadas, larguraTabuasMetro, dimensaoY, dimensaoX);
 			if(r1 > -1 && r2 > -1){
 				System.out.println(r1 < r2 ? r1 : r2);
 			}else if(r1 > -1 || r2 > -1){
@@ -81,42 +71,35 @@ public class Main {
 				System.out.println(IMPOSSIVEL);
 			}
 
-
-		}while(!r.nextLine().equals("0 0"));
+		}while(!(lastLine = r.nextLine()).equals("0 0"));
 	}
 
-	static int calcQtdTabuas(int tabuasDoadas, Integer[] tamanhoTabuasDoadas, float larguraTabuasMetro, int dimensaoY, int dimensaoX){
+	static int calcQtdTabuas(int tabuasDoadas, Integer[] tamanhoTabuasDoadas, float larguraTabuasMetro, int dimensaoX, int dimensaoY){
 
 		if(dimensaoX * 100 % (int)(larguraTabuasMetro * 100) != 0){
 			return -1;
 		}
 
 		int qtdTabuas = 0, qtdTabuasLargura = 0, qtdTabuasNecessariasLargura = (int) (dimensaoX / larguraTabuasMetro);
-		int[] resultado = new int[qtdTabuasNecessariasLargura];
-
-
-
-		for (int j = 0; j < tabuasDoadas; j++) {
-			if(qtdTabuasLargura == qtdTabuasNecessariasLargura)return qtdTabuas;
-			int primeiraTabua = tamanhoTabuasDoadas[j];
-			if(primeiraTabua == dimensaoY){
+		Arrays.sort(tamanhoTabuasDoadas);
+		for(int i=tabuasDoadas-1; i > 0; i--){
+			int tabua = tamanhoTabuasDoadas[i], resto = dimensaoY - tabua;
+			if(tabua == -1)break;
+			if(resto > 0){
+				int index = Arrays.binarySearch(tamanhoTabuasDoadas, resto);
+				if(index >= 0){
+					tamanhoTabuasDoadas[index] = -1;
+					tamanhoTabuasDoadas[i] = -1;
+					Arrays.sort(tamanhoTabuasDoadas);
+					qtdTabuas += 2;
+					qtdTabuasLargura++;
+				}
+			}else if(resto == 0){
 				qtdTabuas++;
 				qtdTabuasLargura++;
-			}else if(primeiraTabua < dimensaoY){
-				int diferenca = dimensaoY - primeiraTabua;
-//				for (int k = tabuasDoadas-1; k > j+1; k--) {
-				for (int k = j+1; k < tabuasDoadas; k++) {
-					int segundaTabua = tamanhoTabuasDoadas[k];
-					if(diferenca == segundaTabua){
-						qtdTabuas += 2;
-						tamanhoTabuasDoadas[j] = -1;
-						tamanhoTabuasDoadas[k] = -1;
-						qtdTabuasLargura++;
-						break;
-					}
-				}
 			}
+			if(qtdTabuasLargura == qtdTabuasNecessariasLargura)return qtdTabuas;
 		}
-		return qtdTabuasLargura == qtdTabuasNecessariasLargura ? qtdTabuas : -1;
+		return -1;
 	}
 }

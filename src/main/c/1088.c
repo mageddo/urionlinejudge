@@ -75,7 +75,7 @@ int main(){
 		tmp = dimensaoX;
 		dimensaoX = dimensaoY;
 		dimensaoY = tmp;
-		qsort(tamanhoTabuasDoadas, tabuasDoadas, sizeof(int), cmpfunc);
+//		qsort(tamanhoTabuasDoadas, tabuasDoadas, sizeof(int), cmpfunc);
 		int qtdTabuas2 = calculaQuantidadeTabuas(dimensaoX, dimensaoY, (int)larguraTabuasMetros, tabuasDoadas, tamanhoTabuasDoadas);
 
 		int r = qtdTabuas > qtdTabuas2 ? qtdTabuas : qtdTabuas2;
@@ -104,27 +104,44 @@ int calculaQuantidadeTabuas(int dimensaoX, int dimensaoY, int larguraTabuasMetro
 		return -1;
 	}
 
-	int qtdTabuasNecessariasLargura = dimensaoX / larguraTabuasMetros, i, j; // ja pego as tabuas maiores e completo com o resto das tabuas
-	int qtdTotalTabuas = qtdTabuasNecessariasLargura;
-	for(i=0; i < qtdTabuasNecessariasLargura; i++){
-		const int tamanhoTabuaUsada = tamanhoTabuasDoadas[i];
-		const int tamanhoFaltante = dimensaoY - tamanhoTabuaUsada;
-		if(tamanhoFaltante != 0){
-            int r = procurarTabuaQueEncaixe(tamanhoTabuasDoadas, qtdTabuasNecessariasLargura-1, tabuasDoadas, tamanhoFaltante);
-            if(r == -1){
-                return -1;
+	int qtdTabuasNecessariasLargura = dimensaoX / larguraTabuasMetros, i, j, qtdTabuasEncontradasLargura = 0; // ja pego as tabuas maiores e completo com o resto das tabuas
+	int qtdTotalTabuas = 0;
+	for(i=0; i < tabuasDoadas; i++){
+		const int tamanho1aTabua = tamanhoTabuasDoadas[i];
+        if(tamanho1aTabua == -1)continue;
+		const int tamanhoFaltante = dimensaoY - tamanho1aTabua;
+		if(tamanhoFaltante > 0){
+            for (j = i+1; j < tabuasDoadas; ++j){
+                int tamanhoTabua = tamanhoTabuasDoadas[j];
+                if(tamanhoTabua != -1 && tamanhoTabua == tamanhoFaltante){
+                    tamanhoTabuasDoadas[i] = -1;
+                    tamanhoTabuasDoadas[j] = -1;
+                    qtdTabuasEncontradasLargura++;
+                    qtdTotalTabuas+=2;
+                    break;
+                }
             }
+            tamanhoTabuasDoadas[i] = -1;
+		}else if(tamanhoFaltante < 0){
+            tamanhoTabuasDoadas[i] = -1;
+		}else{
             qtdTotalTabuas++;
+            qtdTabuasEncontradasLargura++;
 		}
 
 	}
-	return qtdTotalTabuas;
+	if(qtdTabuasEncontradasLargura == qtdTabuasNecessariasLargura){
+        return qtdTotalTabuas;
+	}else{
+        return -1;
+	}
+
 }
 
 int cmpfunc (const void * a, const void * b){
-    if(*(int *)a > dimensaoY){
-        return 1;
-    }
+//    if(*(int *)a > dimensaoY){
+//        return 1;
+//    }
 
 	return ( *(int*)b - *(int*)a );
 }

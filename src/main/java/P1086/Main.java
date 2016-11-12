@@ -5,6 +5,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.StringTokenizer;
 
 /**
@@ -36,7 +37,7 @@ public class Main {
 		/*
 		tamanho de cada tabua doada (1 ≤ Xi ≤ 104 para 1 ≤ i ≤ K)
 	*/
-		int[] tamanhoTabuasDoadas;
+		Integer[] tamanhoTabuasDoadas;
 	}
 
 	public static void main(String[] args) throws IOException {
@@ -66,7 +67,7 @@ public class Main {
 			curr.tabuasDoadas = Integer.parseInt(in.readLine());
 
 			// quarta linha
-			curr.tamanhoTabuasDoadas = new int[curr.tabuasDoadas];
+			curr.tamanhoTabuasDoadas = new Integer[curr.tabuasDoadas];
 
 			StringTokenizer boards = new StringTokenizer(in.readLine());
 			int i=0, countTokens = boards.countTokens();
@@ -80,15 +81,20 @@ public class Main {
 
 		for(curr = head; curr != null; curr = curr.next){
 
-			float larguraTabuasMetro = curr.larguraTabuas / 100.0f;
+//			float larguraTabuasMetro = curr.larguraTabuas / 100.0f;
 
-			Arrays.sort(curr.tamanhoTabuasDoadas);
+			Arrays.sort(curr.tamanhoTabuasDoadas, new Comparator<Integer>() {
+				@Override
+				public int compare(Integer o1, Integer o2) {
+					return o2 - o1;
+				}
+			});
 
 //			printEnd("sort");
 
-			int r1 = calcQtdTabuas(curr.tabuasDoadas, curr.tamanhoTabuasDoadas,
-				larguraTabuasMetro, curr.dimensaoX, curr.dimensaoY);
-			int r2 = calcQtdTabuas(curr.tabuasDoadas, curr.tamanhoTabuasDoadas, larguraTabuasMetro, curr.dimensaoY, curr.dimensaoX);
+			int r1 = calcQtdTabuas(curr.tamanhoTabuasDoadas,
+				curr.larguraTabuas, curr.dimensaoX, curr.dimensaoY);
+			int r2 = calcQtdTabuas(curr.tamanhoTabuasDoadas, curr.larguraTabuas, curr.dimensaoY, curr.dimensaoX);
 
 //			printEnd("calc");
 
@@ -109,33 +115,49 @@ public class Main {
 		out.flush();
 	}
 
-	static int calcQtdTabuas(int tabuasDoadas, int[] tamanhoTabuasDoadas, float larguraTabuasMetro, int dimensaoX, int dimensaoY){
+	static int calcQtdTabuas(Integer[] tamanhoTabuasDoadas, int larguraTabuas, int dimensaoX, int dimensaoY){
 
-		if(dimensaoX * 100 % (int)(larguraTabuasMetro * 100) != 0){
+		if(dimensaoX * 100 % larguraTabuas != 0){
 			return -1;
 		}
+		int begin, end, vertical_boards, boards_used,  boards_to_complete = (dimensaoX * 100 / larguraTabuas);
+		begin = 0;
+		end = tamanhoTabuasDoadas.length - 1;
+		vertical_boards = 0;
+		boards_used = 0;
 
-		int qtdTabuas = 0, qtdTabuasLargura = 0, qtdTabuasNecessariasLargura = (int) (dimensaoX / larguraTabuasMetro),
-		lastIndex = 0;
-		for(int i=tabuasDoadas-1; i >= 0; i--){
-			int tabua = tamanhoTabuasDoadas[i], resto = dimensaoY - tabua;
-			if(resto > 0 && lastIndex < i){
-				for(int j=lastIndex; j < i; j++){
-					if(resto == tamanhoTabuasDoadas[j]){
-						lastIndex = j+1;
-						qtdTabuas += 2;
-						qtdTabuasLargura++;
-						break;
+		while (true) {
+			if (vertical_boards == boards_to_complete) break;
+			if (begin > end) return -1;
+
+			if (tamanhoTabuasDoadas[begin] > dimensaoY) {
+				begin++;
+			} else if (tamanhoTabuasDoadas[begin] == dimensaoY) {
+				begin++;
+				vertical_boards++;
+				boards_used++;
+			} else {
+				if (begin != end) {
+					while (true) {
+						if(end < 0 || begin < 0){
+							end--;
+						}
+						if (tamanhoTabuasDoadas[begin] + tamanhoTabuasDoadas[end] == dimensaoY) {
+							end--;
+							vertical_boards++;
+							boards_used += 2;
+							break;
+						}
+						if (tamanhoTabuasDoadas[begin] + tamanhoTabuasDoadas[end] > dimensaoY) {
+							break;
+						}
 					}
 				}
-
-			}else if(resto == 0){
-				qtdTabuas++;
-				qtdTabuasLargura++;
+				begin++;
 			}
-			if(qtdTabuasLargura == qtdTabuasNecessariasLargura)return qtdTabuas;
 		}
-		return -1;
+
+		return boards_used;
 	}
 
 //	static void printEnd(String msg){

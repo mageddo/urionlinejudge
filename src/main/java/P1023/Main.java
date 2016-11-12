@@ -1,17 +1,24 @@
-package urionlinejudge;
+package P1023;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
-public class P1023 {
+public class Main {
+	
+	static class Consumo {
+		public int pessoas;
+		public int consumo;
+	}
+	
 	public static void main(String[] args) throws IOException {
 		BufferedReader r = new BufferedReader(new InputStreamReader(System.in));
 		StringBuilder bf = new StringBuilder();
-		int[][] consumos;
+		List<Consumo> consumos;
 		int c=0, qtd, i,j , pessoas, consumoGeral, tmp;
 		
 		// pegando a cidade
@@ -19,46 +26,38 @@ public class P1023 {
 		if(qtd <= 0)
 			System.exit(0);
 		for(;;){
-			consumos = new int[qtd][2];
 			pessoas = 0; consumoGeral = 0;
-			
+			consumos = new ArrayList<>();
 			// lendo as pessoas da cidade
 			for(i=0; i < qtd; i++){
 				String[] valores = r.readLine().split("\\ ");
-				consumos[i][0] = Integer.parseInt(valores[0]);
-				if(consumos[i][0] <= 0)System.exit(-1);
-				else if(consumos[i][0] > 10)System.exit(-1);
+				Consumo consumo = new Consumo();
+				consumo.pessoas = Integer.parseInt(valores[0]);
+				if(consumo.pessoas <= 0)System.exit(-1);
+				else if(consumo.pessoas > 10)System.exit(-1);
 				tmp = Integer.parseInt(valores[1]);
 				if(tmp <= 0)System.exit(-1);
 				else if(tmp > 200)System.exit(-1);
-				consumos[i][1] = tmp / consumos[i][0];
-				pessoas += consumos[i][0];
+				consumo.consumo = tmp / consumo.pessoas;
+				pessoas += consumo.pessoas;
 				consumoGeral += tmp;
+				consumos.add(consumo);
 			}
-			Collections.sort(Arrays.asList(consumos), new Comparator<int[]>(){
-				@Override
-				public int compare(int[] o1, int[] o2) {
-					throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-				}
-			});
 			// sorteando
-			for(i=0; i < consumos.length; i++){
-				for(j=i; j < consumos.length; j++){
-					tmp = consumos[i][1];
-					if(tmp > consumos[j][1]){
-						consumos[i][1] = consumos[j][1];
-						consumos[j][1] = tmp;
-						tmp = consumos[i][0];
-						consumos[i][0] = consumos[j][0];
-						consumos[j][0] = tmp;
-					}
+			Collections.sort(consumos, new Comparator<Consumo>(){
+
+				@Override
+				public int compare(Consumo o1, Consumo o2) {
+					return Integer.compare(o1.consumo, o2.consumo);
 				}
-			}
+				
+			});
 			
 			bf.append(String.format("Cidade# %d:\n", ++c));	
-			for(i=0; i < consumos.length; i++){
-				bf.append(String.format("%d-%d", consumos[i][0], consumos[i][1]));
-				if(i+1 != consumos.length){
+		
+			for(i=0; i < qtd; i++){
+				bf.append(String.format("%d-%d", consumos.get(i).pessoas, consumos.get(i).consumo));
+				if(i+1 != qtd){
 					bf.append(" ");
 				}
 			}

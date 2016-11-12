@@ -16,6 +16,8 @@
 **/desempenho
 **/nbproject
 **/build
+dist/
+
 
 # log files
 *.log
@@ -42,3 +44,4 @@
 *.jpeg
 *.JPEG
 *.ico
+/target

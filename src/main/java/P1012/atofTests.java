@@ -3,19 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package urionlinejudge;
+package P1012;
 
 /**
  *
  * @author elvis
  */
-public class Urionlinejudge {
-
-	/**
-	 * @param args the command line arguments
-	 */
+public class atofTests {
 	public static void main(String[] args) {
-		P1023.main(args);
+		double s = Main.atof(new char[]{'1', '2', '.', '5', '6'});
+		
+		System.out.println(s);
 	}
-	
 }

@@ -37,6 +37,8 @@ public class Main {
 	String lastLine = r.nextLine();
 		do{
 
+			long start = System.currentTimeMillis();
+
 			String[] dimensoes = lastLine.split(" ");
 
 			// primeira linha
@@ -60,10 +62,19 @@ public class Main {
 			r.nextLine();
 
 			float larguraTabuasMetro = larguraTabuas / 100.0f;
+
+			System.out.printf("allocate=%d\n", System.currentTimeMillis() - start);
+			start = System.currentTimeMillis();
+
 			Arrays.sort(tamanhoTabuasDoadas);
+
+			System.out.printf("sort=%d\n", System.currentTimeMillis() - start);
+			start = System.currentTimeMillis();
+
 			int r1 = calcQtdTabuas(tabuasDoadas, tamanhoTabuasDoadas,
 					larguraTabuasMetro, dimensaoX, dimensaoY);
 			int r2 = calcQtdTabuas(tabuasDoadas, tamanhoTabuasDoadas, larguraTabuasMetro, dimensaoY, dimensaoX);
+			System.out.printf("calc=%d\n", System.currentTimeMillis() - start);
 			if(r1 > -1 && r2 > -1){
 				System.out.println(r1 < r2 ? r1 : r2);
 			}else if(r1 > -1 || r2 > -1){
@@ -85,13 +96,16 @@ public class Main {
 		lastIndex = 0;
 		for(int i=tabuasDoadas-1; i >= 0; i--){
 			int tabua = tamanhoTabuasDoadas[i], resto = dimensaoY - tabua;
-			if(resto > 0 && lastIndex <= i){
-				int index = Arrays.binarySearch(tamanhoTabuasDoadas, lastIndex, i, resto);
-				if(index >= 0){
-					lastIndex = index+1;
-					qtdTabuas += 2;
-					qtdTabuasLargura++;
+			if(resto > 0 && lastIndex < i){
+				for(int j=lastIndex; j < i; j++){
+					if(resto == tamanhoTabuasDoadas[j]){
+						lastIndex = j+1;
+						qtdTabuas += 2;
+						qtdTabuasLargura++;
+						break;
+					}
 				}
+
 			}else if(resto == 0){
 				qtdTabuas++;
 				qtdTabuasLargura++;

@@ -15,30 +15,37 @@ public class Main {
 	private static final byte[] IMPOSSIVEL = "impossivel".getBytes();
 	private static long START = System.nanoTime();
 
+	static class Calc {
+		Calc next;
+
+		/*
+		dimensao do salao em metros  (1 ≤ N,M ≤ 104)
+		*/
+		int dimensaoX, dimensaoY;
+
+		/*
+			em cm (1 ≤ L ≤ 100)
+		*/
+		int larguraTabuas;
+
+		/*
+			(1 ≤ K ≤ 105)
+		*/
+		int tabuasDoadas;
+
+		/*
+		tamanho de cada tabua doada (1 ≤ Xi ≤ 104 para 1 ≤ i ≤ K)
+	*/
+		int[] tamanhoTabuasDoadas;
+	}
+
 	public static void main(String[] args) throws IOException {
 
 		final BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 		final BufferedOutputStream out = new BufferedOutputStream(System.out);
+		final Calc head = new Calc();
+		Calc curr = head;
 
-	/*
-		dimensao do salao em metros  (1 ≤ N,M ≤ 104)
-	*/
-		int dimensaoX, dimensaoY;
-
-	/*
-		em cm (1 ≤ L ≤ 100)
-	*/
-		int larguraTabuas;
-
-	/*
-		(1 ≤ K ≤ 105)
-	*/
-		int tabuasDoadas;
-
-	/*
-		tamanho de cada tabua doada (1 ≤ Xi ≤ 104 para 1 ≤ i ≤ K)
-	*/
-	Integer[] tamanhoTabuasDoadas;
 	String lastLine = in.readLine();
 		do{
 
@@ -46,37 +53,42 @@ public class Main {
 
 			final StringTokenizer dimensoes = new StringTokenizer(lastLine);
 
+
 			// primeira linha
-			dimensaoX = Integer.parseInt(dimensoes.nextToken());
-			dimensaoY = Integer.parseInt(dimensoes.nextToken());
+			curr.dimensaoX = Integer.parseInt(dimensoes.nextToken());
+			curr.dimensaoY = Integer.parseInt(dimensoes.nextToken());
 
 			// segunda linha
-			larguraTabuas = new Integer(in.readLine());
+			curr.larguraTabuas = Integer.parseInt(in.readLine());
 
 
 			// terceira linha
-			tabuasDoadas = new Integer(in.readLine());
+			curr.tabuasDoadas = Integer.parseInt(in.readLine());
 
 			// quarta linha
-			tamanhoTabuasDoadas = new Integer[tabuasDoadas];
+			curr.tamanhoTabuasDoadas = new int[curr.tabuasDoadas];
 
 			StringTokenizer boards = new StringTokenizer(in.readLine());
 			int i=0, countTokens = boards.countTokens();
 			for(; i < countTokens; i++){
-				tamanhoTabuasDoadas[i] = new Integer(boards.nextToken());
+				curr.tamanhoTabuasDoadas[i] = Integer.parseInt(boards.nextToken());
 			}
-
-			float larguraTabuasMetro = larguraTabuas / 100.0f;
 
 			printEnd("in");
 
-			Arrays.sort(tamanhoTabuasDoadas);
+		}while(!(lastLine = in.readLine()).equals("0 0") && (curr = curr.next = new Calc())!= null);
+
+		for(curr = head; curr != null; curr = curr.next){
+
+			float larguraTabuasMetro = curr.larguraTabuas / 100.0f;
+
+			Arrays.sort(curr.tamanhoTabuasDoadas);
 
 			printEnd("sort");
 
-			int r1 = calcQtdTabuas(tabuasDoadas, tamanhoTabuasDoadas,
-					larguraTabuasMetro, dimensaoX, dimensaoY);
-			int r2 = calcQtdTabuas(tabuasDoadas, tamanhoTabuasDoadas, larguraTabuasMetro, dimensaoY, dimensaoX);
+			int r1 = calcQtdTabuas(curr.tabuasDoadas, curr.tamanhoTabuasDoadas,
+				larguraTabuasMetro, curr.dimensaoX, curr.dimensaoY);
+			int r2 = calcQtdTabuas(curr.tabuasDoadas, curr.tamanhoTabuasDoadas, larguraTabuasMetro, curr.dimensaoY, curr.dimensaoX);
 
 			printEnd("calc");
 
@@ -92,13 +104,12 @@ public class Main {
 			}
 
 			printEnd("out");
-
-		}while(!(lastLine = in.readLine()).equals("0 0"));
+		}
 
 		out.flush();
 	}
 
-	static int calcQtdTabuas(int tabuasDoadas, Integer[] tamanhoTabuasDoadas, float larguraTabuasMetro, int dimensaoX, int dimensaoY){
+	static int calcQtdTabuas(int tabuasDoadas, int[] tamanhoTabuasDoadas, float larguraTabuasMetro, int dimensaoX, int dimensaoY){
 
 		if(dimensaoX * 100 % (int)(larguraTabuasMetro * 100) != 0){
 			return -1;

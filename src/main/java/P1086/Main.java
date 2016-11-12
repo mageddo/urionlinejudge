@@ -60,7 +60,8 @@ public class Main {
 			r.nextLine();
 
 			float larguraTabuasMetro = larguraTabuas / 100.0f;
-			int r1 = calcQtdTabuas(tabuasDoadas, Arrays.copyOf(tamanhoTabuasDoadas, tamanhoTabuasDoadas.length),
+			Arrays.sort(tamanhoTabuasDoadas);
+			int r1 = calcQtdTabuas(tabuasDoadas, tamanhoTabuasDoadas,
 					larguraTabuasMetro, dimensaoX, dimensaoY);
 			int r2 = calcQtdTabuas(tabuasDoadas, tamanhoTabuasDoadas, larguraTabuasMetro, dimensaoY, dimensaoX);
 			if(r1 > -1 && r2 > -1){
@@ -80,17 +81,14 @@ public class Main {
 			return -1;
 		}
 
-		int qtdTabuas = 0, qtdTabuasLargura = 0, qtdTabuasNecessariasLargura = (int) (dimensaoX / larguraTabuasMetro);
-		Arrays.sort(tamanhoTabuasDoadas);
-		for(int i=tabuasDoadas-1; i > 0; i--){
+		int qtdTabuas = 0, qtdTabuasLargura = 0, qtdTabuasNecessariasLargura = (int) (dimensaoX / larguraTabuasMetro),
+		lastIndex = 0;
+		for(int i=tabuasDoadas-1; i >= 0; i--){
 			int tabua = tamanhoTabuasDoadas[i], resto = dimensaoY - tabua;
-			if(tabua == -1)break;
-			if(resto > 0){
-				int index = Arrays.binarySearch(tamanhoTabuasDoadas, resto);
+			if(resto > 0 && lastIndex <= i){
+				int index = Arrays.binarySearch(tamanhoTabuasDoadas, lastIndex, i, resto);
 				if(index >= 0){
-					tamanhoTabuasDoadas[index] = -1;
-					tamanhoTabuasDoadas[i] = -1;
-					Arrays.sort(tamanhoTabuasDoadas);
+					lastIndex = index+1;
 					qtdTabuas += 2;
 					qtdTabuasLargura++;
 				}

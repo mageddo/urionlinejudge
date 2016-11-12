@@ -37,11 +37,11 @@ public class Main {
 	String lastLine = r.nextLine();
 		do{
 
-			String[] dimensions = lastLine.split(" ");
+			String[] dimensoes = lastLine.split(" ");
 
 			// primeira linha
-			dimensaoX = Integer.parseInt(dimensions[0]);
-			dimensaoY = Integer.parseInt(dimensions[1]);
+			dimensaoX = Integer.parseInt(dimensoes[0]);
+			dimensaoY = Integer.parseInt(dimensoes[1]);
 
 			// segunda linha
 			larguraTabuas = r.nextInt();

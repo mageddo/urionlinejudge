@@ -1,19 +1,23 @@
 package P1086;
 
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Arrays;
-import java.util.Scanner;
 
 /**
  * Created by elvis on 12/11/16.
  */
 public class Main {
 
-	public static final String IMPOSSIVEL = "impossivel";
+	private static final byte[] IMPOSSIVEL = "impossivel".getBytes();
+	private static long START = System.nanoTime();
 
 	public static void main(String[] args) throws IOException {
 
-		final Scanner r = new Scanner(System.in);
+		final BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+		final BufferedOutputStream out = new BufferedOutputStream(System.out);
 
 	/*
 		dimensao do salao em metros  (1 ≤ N,M ≤ 104)
@@ -34,10 +38,10 @@ public class Main {
 		tamanho de cada tabua doada (1 ≤ Xi ≤ 104 para 1 ≤ i ≤ K)
 	*/
 	Integer[] tamanhoTabuasDoadas;
-	String lastLine = r.nextLine();
+	String lastLine = in.readLine();
 		do{
 
-			long start = System.currentTimeMillis();
+			printEnd("start");
 
 			String[] dimensoes = lastLine.split(" ");
 
@@ -46,44 +50,48 @@ public class Main {
 			dimensaoY = Integer.parseInt(dimensoes[1]);
 
 			// segunda linha
-			larguraTabuas = r.nextInt();
+			larguraTabuas = new Integer(in.readLine());
 
 
 			// terceira linha
-			tabuasDoadas = r.nextInt();
+			tabuasDoadas = new Integer(in.readLine());
 
 			// quarta linha
 			tamanhoTabuasDoadas = new Integer[tabuasDoadas];
 
+			String[] boards = in.readLine().split(" ");
 			int i=0;
-			for(; i < tabuasDoadas; i++){
-				tamanhoTabuasDoadas[i] = r.nextInt();
+			for(; i < boards.length; i++){
+				tamanhoTabuasDoadas[i] = new Integer(boards[i]);
 			}
-			r.nextLine();
 
 			float larguraTabuasMetro = larguraTabuas / 100.0f;
 
-			System.out.printf("allocate=%d\n", System.currentTimeMillis() - start);
-			start = System.currentTimeMillis();
+			printEnd("in");
 
 			Arrays.sort(tamanhoTabuasDoadas);
 
-			System.out.printf("sort=%d\n", System.currentTimeMillis() - start);
-			start = System.currentTimeMillis();
+			printEnd("sort");
 
 			int r1 = calcQtdTabuas(tabuasDoadas, tamanhoTabuasDoadas,
 					larguraTabuasMetro, dimensaoX, dimensaoY);
 			int r2 = calcQtdTabuas(tabuasDoadas, tamanhoTabuasDoadas, larguraTabuasMetro, dimensaoY, dimensaoX);
-			System.out.printf("calc=%d\n", System.currentTimeMillis() - start);
+
+			printEnd("calc");
+
 			if(r1 > -1 && r2 > -1){
-				System.out.println(r1 < r2 ? r1 : r2);
+				out.write(r1 < r2 ? r1 : r2);
+				out.write('\n');
 			}else if(r1 > -1 || r2 > -1){
-				System.out.println(r1 > r2 ? r1 : r2);
+				out.write(r1 > r2 ? r1 : r2);
+				out.write('\n');
 			}else{
-				System.out.println(IMPOSSIVEL);
+				out.write(IMPOSSIVEL);
 			}
 
-		}while(!(lastLine = r.nextLine()).equals("0 0"));
+			printEnd("out");
+
+		}while(!(lastLine = in.readLine()).equals("0 0"));
 	}
 
 	static int calcQtdTabuas(int tabuasDoadas, Integer[] tamanhoTabuasDoadas, float larguraTabuasMetro, int dimensaoX, int dimensaoY){
@@ -113,5 +121,10 @@ public class Main {
 			if(qtdTabuasLargura == qtdTabuasNecessariasLargura)return qtdTabuas;
 		}
 		return -1;
+	}
+
+	static void printEnd(String msg){
+		System.out.printf("%s=%d\n", msg, System.nanoTime() - START);
+		START = System.nanoTime();
 	}
 }

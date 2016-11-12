@@ -3,8 +3,9 @@
 #include <string.h>
 
 int cmpfunc (const void * a, const void * b);
-int procurarTabuaQueEncaixe(int *tamanhoTabuasDoadas, int aPartir, int ate, int tamanhoBuscado);
+int calculaQuantidadeTabuas(int dimensaoX, int dimensaoY, float larguraTabuasMetros, int tabuasDoadas, int *tamanhoTabuasDoadas);
 
+int main(){
 	char condArr[10];
 	char *cond = condArr;
 
@@ -29,8 +30,6 @@ int procurarTabuaQueEncaixe(int *tamanhoTabuasDoadas, int aPartir, int ate, int 
 	int *tamanhoTabuasDoadas;
 
 	int tmp;
-
-int main(){
 
 	do{
 
@@ -65,18 +64,17 @@ int main(){
 
 		// somando as larguras chega exatamente na largura/altura do salao e nao fica faltando tabuas?
 		float larguraTabuasMetros = larguraTabuas / 100.0;
-        if(larguraTabuasMetros - (int) larguraTabuasMetros != 0){
+        /*if(larguraTabuasMetros - (int) larguraTabuasMetros != 0){
             printf("impossivel\n");
             goto proximoComando;
-        }
+        }*/
 
 		qsort(tamanhoTabuasDoadas, tabuasDoadas, sizeof(int), cmpfunc);
-		int qtdTabuas = calculaQuantidadeTabuas(dimensaoX, dimensaoY, (int)larguraTabuasMetros, tabuasDoadas, tamanhoTabuasDoadas);
+		int qtdTabuas = calculaQuantidadeTabuas(dimensaoX, dimensaoY, larguraTabuasMetros, tabuasDoadas, tamanhoTabuasDoadas);
 		tmp = dimensaoX;
 		dimensaoX = dimensaoY;
 		dimensaoY = tmp;
-//		qsort(tamanhoTabuasDoadas, tabuasDoadas, sizeof(int), cmpfunc);
-		int qtdTabuas2 = calculaQuantidadeTabuas(dimensaoX, dimensaoY, (int)larguraTabuasMetros, tabuasDoadas, tamanhoTabuasDoadas);
+		int qtdTabuas2 = calculaQuantidadeTabuas(dimensaoX, dimensaoY, larguraTabuasMetros, tabuasDoadas, tamanhoTabuasDoadas);
 
 		int r = qtdTabuas > qtdTabuas2 ? qtdTabuas : qtdTabuas2;
 		if(r == -1){
@@ -99,8 +97,8 @@ int main(){
 	return 0;
 }
 
-int calculaQuantidadeTabuas(int dimensaoX, int dimensaoY, int larguraTabuasMetros, int tabuasDoadas, int *tamanhoTabuasDoadas){
-	if(dimensaoX % larguraTabuasMetros != 0){
+int calculaQuantidadeTabuas(int dimensaoX, int dimensaoY, float larguraTabuasMetros, int tabuasDoadas, int *tamanhoTabuasDoadas){
+	if(dimensaoX * 100 % (int)(larguraTabuasMetros * 100) != 0){
 		return -1;
 	}
 
@@ -139,20 +137,6 @@ int calculaQuantidadeTabuas(int dimensaoX, int dimensaoY, int larguraTabuasMetro
 }
 
 int cmpfunc (const void * a, const void * b){
-//    if(*(int *)a > dimensaoY){
-//        return 1;
-//    }
-
 	return ( *(int*)b - *(int*)a );
 }
 
-int procurarTabuaQueEncaixe(int *tamanhoTabuasDoadas, int aPartir, int ate, int tamanhoBuscado){
-	int i;
-	for (i = aPartir; i < ate; ++i){
-		int tamanhoTabua = tamanhoTabuasDoadas[i];
-		if(tamanhoTabua != -1 && tamanhoTabua == tamanhoBuscado){
-			return tamanhoBuscado;
-		}
-	}
-	return -1;
-}

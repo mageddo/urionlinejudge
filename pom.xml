@@ -4,7 +4,7 @@
   <artifactId>urionlinejudge</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <build>
-    <sourceDirectory>src</sourceDirectory>
+    <!--<sourceDirectory>src</sourceDirectory>-->
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -16,11 +16,11 @@
       </plugin>
     </plugins>
   </build>
-  <dependencies>
-  	<dependency>
-  		<groupId>com.mageddo</groupId>
-  		<artifactId>utils</artifactId>
-  		<version>0.1.8</version>
-  	</dependency>
-  </dependencies>
+  <!--<dependencies>-->
+  	<!--<dependency>-->
+  		<!--<groupId>com.mageddo</groupId>-->
+  		<!--<artifactId>utils</artifactId>-->
+  		<!--<version>0.1.8</version>-->
+  	<!--</dependency>-->
+  <!--</dependencies>-->
 </project>

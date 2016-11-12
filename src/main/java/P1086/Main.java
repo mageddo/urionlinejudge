@@ -5,6 +5,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
+import java.util.StringTokenizer;
 
 /**
  * Created by elvis on 12/11/16.
@@ -43,11 +44,11 @@ public class Main {
 
 			printEnd("start");
 
-			String[] dimensoes = lastLine.split(" ");
+			final StringTokenizer dimensoes = new StringTokenizer(lastLine);
 
 			// primeira linha
-			dimensaoX = Integer.parseInt(dimensoes[0]);
-			dimensaoY = Integer.parseInt(dimensoes[1]);
+			dimensaoX = Integer.parseInt(dimensoes.nextToken());
+			dimensaoY = Integer.parseInt(dimensoes.nextToken());
 
 			// segunda linha
 			larguraTabuas = new Integer(in.readLine());
@@ -59,10 +60,10 @@ public class Main {
 			// quarta linha
 			tamanhoTabuasDoadas = new Integer[tabuasDoadas];
 
-			String[] boards = in.readLine().split(" ");
-			int i=0;
-			for(; i < boards.length; i++){
-				tamanhoTabuasDoadas[i] = new Integer(boards[i]);
+			StringTokenizer boards = new StringTokenizer(in.readLine());
+			int i=0, countTokens = boards.countTokens();
+			for(; i < countTokens; i++){
+				tamanhoTabuasDoadas[i] = new Integer(boards.nextToken());
 			}
 
 			float larguraTabuasMetro = larguraTabuas / 100.0f;
@@ -80,18 +81,21 @@ public class Main {
 			printEnd("calc");
 
 			if(r1 > -1 && r2 > -1){
-				out.write(r1 < r2 ? r1 : r2);
+				out.write(Integer.toString(r1 < r2 ? r1 : r2).getBytes());
 				out.write('\n');
 			}else if(r1 > -1 || r2 > -1){
-				out.write(r1 > r2 ? r1 : r2);
+				out.write(Integer.toString(r1 > r2 ? r1 : r2).getBytes());
 				out.write('\n');
 			}else{
 				out.write(IMPOSSIVEL);
+				out.write('\n');
 			}
 
 			printEnd("out");
 
 		}while(!(lastLine = in.readLine()).equals("0 0"));
+
+		out.flush();
 	}
 
 	static int calcQtdTabuas(int tabuasDoadas, Integer[] tamanhoTabuasDoadas, float larguraTabuasMetro, int dimensaoX, int dimensaoY){
@@ -124,7 +128,7 @@ public class Main {
 	}
 
 	static void printEnd(String msg){
-		System.out.printf("%s=%d\n", msg, System.nanoTime() - START);
+		System.out.printf("\t\t%s=%d\n", msg, System.nanoTime() - START);
 		START = System.nanoTime();
 	}
 }

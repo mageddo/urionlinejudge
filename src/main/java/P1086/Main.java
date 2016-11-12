@@ -49,7 +49,7 @@ public class Main {
 	String lastLine = in.readLine();
 		do{
 
-			printEnd("start");
+//			printEnd("start");
 
 			final StringTokenizer dimensoes = new StringTokenizer(lastLine);
 
@@ -74,7 +74,7 @@ public class Main {
 				curr.tamanhoTabuasDoadas[i] = Integer.parseInt(boards.nextToken());
 			}
 
-			printEnd("in");
+//			printEnd("in");
 
 		}while(!(lastLine = in.readLine()).equals("0 0") && (curr = curr.next = new Calc())!= null);
 
@@ -84,13 +84,13 @@ public class Main {
 
 			Arrays.sort(curr.tamanhoTabuasDoadas);
 
-			printEnd("sort");
+//			printEnd("sort");
 
 			int r1 = calcQtdTabuas(curr.tabuasDoadas, curr.tamanhoTabuasDoadas,
 				larguraTabuasMetro, curr.dimensaoX, curr.dimensaoY);
 			int r2 = calcQtdTabuas(curr.tabuasDoadas, curr.tamanhoTabuasDoadas, larguraTabuasMetro, curr.dimensaoY, curr.dimensaoX);
 
-			printEnd("calc");
+//			printEnd("calc");
 
 			if(r1 > -1 && r2 > -1){
 				out.write(Integer.toString(r1 < r2 ? r1 : r2).getBytes());
@@ -103,7 +103,7 @@ public class Main {
 				out.write('\n');
 			}
 
-			printEnd("out");
+//			printEnd("out");
 		}
 
 		out.flush();
@@ -138,8 +138,8 @@ public class Main {
 		return -1;
 	}
 
-	static void printEnd(String msg){
-		System.out.printf("\t\t%s=%d\n", msg, System.nanoTime() - START);
-		START = System.nanoTime();
-	}
+//	static void printEnd(String msg){
+//		System.out.printf("\t\t%s=%d\n", msg, System.nanoTime() - START);
+//		START = System.nanoTime();
+//	}
 }

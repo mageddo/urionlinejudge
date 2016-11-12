@@ -1,7 +1,6 @@
 .idea/
 bin/
 obj/
-src/main/c/
 *.cbp
 *.depend
 *.iml

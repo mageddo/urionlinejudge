@@ -4,7 +4,12 @@ import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.time.Duration;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.StringTokenizer;
 
 /**
@@ -16,9 +21,9 @@ public class Main {
 	static final BufferedOutputStream out = new BufferedOutputStream(System.out);
 
 	public static void main(String[] args) throws IOException {
-
+		// nao funciona porque a entrada vem negativa e o programa deles calcula errado conforme evidencia 4
 		final double days, hours, minutes, seconds;
-		final long difference;
+		long difference;
 		final Event eventStart = readEvent(), eventEnd = readEvent();
 		final Calendar calendarStart = Calendar.getInstance(), calendarEnd = Calendar.getInstance();
 
@@ -26,13 +31,6 @@ public class Main {
 		fillCalendar(calendarEnd, eventEnd);
 
 		difference = calendarEnd.getTimeInMillis() - calendarStart.getTimeInMillis();
-		if(
-				difference < 1000 * 60 // 1 minute
-				|| calendarEnd.get(Calendar.MONTH) != Calendar.APRIL
-				|| calendarStart.get(Calendar.MONTH) != Calendar.APRIL
-		){
-			return ;
-		}
 
 		days = difference / 1000.0 / 60.0 / 60.0 / 24.0;
 		hours = (days - (long)days) * 24.0;

@@ -5,3 +5,5 @@ obj/
 *.depend
 *.iml
 *.layout
+*.class
+target/

@@ -13,7 +13,6 @@ public class Main {
 		final BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 		int initial = Integer.parseInt(in.readLine());
 
-
 		for(int i=0; i < 10; i++){
 			out.write('N');
 			out.write('[');

@@ -1,4 +1,4 @@
-package P1023;
+package iniciante.P1023;
 
 import java.io.BufferedReader;
 import java.io.IOException;

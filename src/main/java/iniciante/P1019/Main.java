@@ -1,4 +1,4 @@
-package P1019;
+package iniciante.P1019;
 
 import java.io.IOException;
 import java.util.Scanner;

@@ -1,4 +1,4 @@
-package P1086;
+package iniciante.P1086;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;

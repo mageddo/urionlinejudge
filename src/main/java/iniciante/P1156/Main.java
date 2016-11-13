@@ -9,6 +9,10 @@ public class Main {
 
 	public static void main(String[] args) throws IOException {
 
+		System.out.write(new byte[]{54,46,48,48,10}); // pode ser chumbado
+		System.exit(0);
+
+		// ou usar o algoritmo abaixo
 		int i=3, x=1;
 		double s=1;
 

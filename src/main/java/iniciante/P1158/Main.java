@@ -16,15 +16,15 @@ public class Main {
 		int n, x, y;
 		final BufferedOutputStream out = new BufferedOutputStream(System.out);
 		final BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-
 		n = Integer.parseInt(in.readLine());
+
 		for(; n > 0; n--){
 			StringTokenizer tokenizer = new StringTokenizer(in.readLine());
 			int sum=0;
 			x = Integer.parseInt(tokenizer.nextToken());
 			y = Integer.parseInt(tokenizer.nextToken());
 			for(;y > 0; x++){
-				if(x % 2 == 1){
+				if(Math.abs(x % 2) == 1){
 					y--;
 					sum += x;
 				}

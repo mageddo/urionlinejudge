@@ -7,8 +7,10 @@ import org.junit.Test;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
+import static org.junit.Assert.*;
+
 /**
- * Created by elvis on 12/11/16.
+ * Created by elvis on 13/11/16.
  */
 public class MainTest {
 
@@ -43,5 +45,4 @@ public class MainTest {
 		Assert.assertEquals("O JOGO DUROU 14 HORA(S)\n", new String(out.toByteArray()));
 
 	}
-
 }

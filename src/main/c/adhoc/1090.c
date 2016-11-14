@@ -1,22 +1,28 @@
 #include<stdio.h>
+#include<stdlib.h>
+
+typedef struct Node {
+	char qtd;
+	char symbol;
+	struct Node* next;
+} Node;
+
+typedef struct CardType {
+	struct Node* last;
+	struct Node* head;
+} CardType;
+
+void fillStruct(struct CardType* type, struct Node* node);
 
 int main(){
 
-	typedef struct Node {
-		char qtd;
-		char symbol;
-		struct Node* next;
-	} Node;
-
-	typedef struct CardType {
-		struct Node* last;
-		struct Node* head;
-	} CardType;
 
 	struct CardType
-				umQuadrado, doisQuadrado, tresQuadrado,
-				umCirculo, doisCiruclo, tresCirculo,
-				umTriangulo, doisTriangulo, tresTriangulo;
+				*umQuadrado =  malloc(sizeof(CardType)), *doisQuadrado = malloc(sizeof(CardType)),
+				*tresQuadrado = malloc(sizeof(CardType)),
+				*umCirculo = malloc(sizeof(CardType)), *doisCirculos = malloc(sizeof(CardType)),
+				*tresCirculo = malloc(sizeof(CardType)), *umTriangulo = malloc(sizeof(CardType)),
+				*doisTriangulo = malloc(sizeof(CardType)), *tresTriangulo = malloc(sizeof(CardType));
 
 	int cards, i;
 	char c, qtd;
@@ -38,30 +44,24 @@ int main(){
 
 			c = getchar();
 //			printf("forma=%c\n", c);
-			struct Node node;
-			node.qtd = qtd;
-			node.symbol = c;
-
+			struct Node* node = malloc(sizeof(Node));
+			(*node).qtd = qtd;
+			(*node).symbol = c;
+//			(*node).next = NULL;
 			switch(c){
 
 				case 't': // triangulo
 					switch(qtd){
 						case 'u': // um
-							umTriangulo.last = &node;
-							if(!umTriangulo.head)
-								umTriangulo.head = &node;
+							fillStruct(umTriangulo, node);
 						break;
 
 						case 'd': // dois
-							doisTriangulo.last = &node;
-							if(!doisTriangulo.head)
-								doisTriangulo.head = &node;
+							fillStruct(doisTriangulo, node);
 						break;
 
 						case 't': // tres
-							tresTriangulo.last = &node;
-							if(!tresTriangulo.head)
-								tresTriangulo.head = &node;
+							fillStruct(tresTriangulo, node);
 						break;
 					}
 				break;
@@ -69,21 +69,15 @@ int main(){
 				case 'q': // quadrado
 					switch(qtd){
 						case 'u': // um
-							umQuadrado.last = &node;
-							if(!umQuadrado.head)
-								umQuadrado.head = &node;
+							fillStruct(umQuadrado, node);
 						break;
 
 						case 'd': // dois
-							doisQuadrado.last = &node;
-							if(!doisQuadrado.head)
-								doisQuadrado.head = &node;
+							fillStruct(doisQuadrado, node);
 						break;
 
 						case 't': // tres
-							tresQuadrado.last = &node;
-							if(!tresQuadrado.head)
-								tresQuadrado.head = &node;
+							fillStruct(tresQuadrado, node);
 						break;
 					}
 				break;
@@ -91,34 +85,55 @@ int main(){
 				case 'c': // circulo
 					switch(qtd){
 						case 'u': // um
-							umCirculo.last = &node;
-							if(!umCirculo.head)
-								umCirculo.head = &node;
+							fillStruct(umCirculo, node);
 						break;
 
 						case 'd': // dois
-							doisCiruclo.last = &node;
-							if(!doisCiruclo.head)
-								doisCiruclo.head = &node;
+							fillStruct(doisCirculos, node);
 						break;
 
 						case 't': // tres
-							tresCirculo.last = &node;
-							if(!tresCirculo.head)
-								tresCirculo.head = &node;
+							fillStruct(tresCirculo, node);
 						break;
 					}
 				break;
 
 			}
 
+
+
 			while((c = getchar())!= '\n');
 
 		}
-
+		int foundSets = 0;
+//		printf("%p\n", NULL);
+		for(; ((*umCirculo).head); (*umCirculo).head = (*(*umCirculo).head).next){
+				if(doisCirculos)
 		
+			printf("%d\n", (*(*umCirculo).head).qtd);
+		}
+
+
+//		printf("%p\n", umCirculo.head);
+
+//			printf("%c - %c\n", (*umCirculo.head).qtd, (*umCirculo.head).symbol);
+
+//		}
+
 
 //		printf("\n");
 	}
+
+}
+
+void fillStruct(struct CardType* type, struct Node* node){
+
+	if(!(*type).head){
+		(*type).head = node;
+	}else{
+		(*(*type).last).next = node;
+	}
+	(*type).last = node;
+
 
 }

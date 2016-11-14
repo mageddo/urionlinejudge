@@ -23,15 +23,21 @@ public class Main {
 			a = Integer.parseInt(tokenizer.nextToken());
 			b = Integer.parseInt(tokenizer.nextToken());
 
+			if(b == 1){
+				out.write(String.format("Case %d: %d\n", k, a).getBytes());
+				continue;
+			}
+
 			Soldier head = new Soldier(1), token, last = head;
 			for(i=2; i <= a; i++){
-				head = head.next = new Soldier(i);
+					last = last.next = new Soldier(i);
 			}
-			head.next = last;
-			head = last;
+			last.next = head;
+			last = head;
 
-			for(i=1,j=1, token=head; i <= a && token.next != token; i++, token = token.next){
+			for(i=1,j=1, token=head; i < a && token.next != token; i++, token = token.next){
 
+//				if(i % b == 0){
 				if(i == b){
 					last.next = token.next;
 					i = 0;

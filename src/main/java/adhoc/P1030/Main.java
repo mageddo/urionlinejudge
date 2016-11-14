@@ -35,11 +35,9 @@ public class Main {
 			last.next = head;
 			last = head;
 
-			for(i=0, token=head; token.next != token; i++, token = token.next){
+			for(i=1, token=head; token.next != token; i++, token = token.next){
 
-//				System.out.println("a="+ i + " b=" + b + " a=" + a);
 				if(i % b == 0){
-//				if(i == b){
 					last.next = token.next;
 				}else if(i > 1){
 					last = last.next;

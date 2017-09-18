@@ -1,3 +1,5 @@
+Deprecated in favor https://github.com/mageddo/algorithms
+
 Soluções dos problemas dos Algoritmos da URI Online Judge
 
 # Compilando e rodando
